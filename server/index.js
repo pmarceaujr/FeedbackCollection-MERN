@@ -5,13 +5,32 @@ const FacebookStrategy = require('passport-facebook').Strategy
 const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy
 const GithubStrategy = require('passport-github2').Strategy
 const LocalStrategy = require('passport-local').Strategy
+const keys = require('./config/keys')
 // alternate code below:  using ES6
 //import express from 'express';
 
 //Create a new express app called app
 const app = express();
 
-passport.use(new GoogleStrategy())
+passport.use(new GoogleStrategy({
+    clientID: keys.googleClientID,
+    clientSecret: keys.googleClientSecret,
+    callbackURL: '/auth/google/callback'
+},
+    (accessToken, refreshToken, profile, done) => {
+        console.log('access: ' + accessToken)
+        console.log('refresh: ' + refreshToken)
+        console.log(profile)
+    }
+)
+)
+
+app.get('/auth/google', passport.authenticate('google', {
+    scope: ['profile', 'email']
+})
+)
+
+app.get('/auth/google/callback', passport.authenticate('google'))
 
 //passport.use(new FacebookStrategy())
 //passport.use(new LinkedInStrategy())
