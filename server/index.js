@@ -4,8 +4,10 @@ const express = require('express')
 const keys = require('./config/keys')
 const mongoose = require('mongoose')
 
-// We do not export anything from passport.js so we can just require it as follows...
+// If we do not export anything from a .js file we can just require it as follows... this will trigger it's "execution"
+require('./models/user')
 require('./services/passport')
+
 
 //Create a new express app called app
 const app = express();
@@ -43,7 +45,7 @@ const PORT = process.env.PORT || 5000
 //this is the app telling node to listen on port 5000
 app.listen(PORT)
 
-
+console.log(`App listening on port: ${PORT}`)
 
 
 
