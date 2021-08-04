@@ -4,6 +4,8 @@ const FacebookStrategy = require('passport-facebook').Strategy
 const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy
 const GithubStrategy = require('passport-github2').Strategy
 const LocalStrategy = require('passport-local').Strategy
+const mongoose = require('mongoose')
+const User = mongoose.model('users') //one argument means we are fetching
 const keys = require('../config/keys')
 
 //BEGIN GOOGLE PASSPORT CODE
@@ -13,9 +15,9 @@ passport.use(new GoogleStrategy({
     callbackURL: '/auth/google/callback'
 },
     (accessToken, refreshToken, profile, done) => {
-        console.log('access: ' + accessToken)
-        console.log('refresh: ' + refreshToken)
-        console.log(profile)
+        console.log(profile.displayName)
+        console.log(profile.id)
+        new User({ google_id: profile.id }).save()
     }
 )
 )
@@ -31,9 +33,8 @@ passport.use(new FacebookStrategy({
 },
 
     (accessToken, refreshToken, profile, done) => {
-        console.log('access: ' + accessToken)
-        console.log('refresh: ' + refreshToken)
-        console.log(profile)
+        console.log(profile.displayName)
+        console.log(profile.id)
     }
 
     // function(accessToken, refreshToken, profile, cb) {
