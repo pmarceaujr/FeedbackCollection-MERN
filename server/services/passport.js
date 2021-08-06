@@ -17,7 +17,16 @@ passport.use(new GoogleStrategy({
     (accessToken, refreshToken, profile, done) => {
         console.log(profile.displayName)
         console.log(profile.id)
-        new User({ google_id: profile.id }).save()
+        User.findOne({ google_id: profile.id })
+            .then((userExists) => {
+                if (userExists) {
+                    console.log('User already in the DB.')
+                }
+                else {
+                    new User({ google_id: profile.id }).save()
+                }
+            })
+
     }
 )
 )
@@ -35,6 +44,15 @@ passport.use(new FacebookStrategy({
     (accessToken, refreshToken, profile, done) => {
         console.log(profile.displayName)
         console.log(profile.id)
+        User.findOne({ facebook_id: profile.id })
+            .then((userExists) => {
+                if (userExists) {
+                    console.log('User already in the DB.')
+                }
+                else {
+                    new User({ facebook_id: profile.id }).save()
+                }
+            })
     }
 
     // function(accessToken, refreshToken, profile, cb) {
