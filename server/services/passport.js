@@ -5,8 +5,25 @@ const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy
 const GithubStrategy = require('passport-github2').Strategy
 const LocalStrategy = require('passport-local').Strategy
 const mongoose = require('mongoose')
-const User = mongoose.model('users') //one argument means we are fetching
 const keys = require('../config/keys')
+const User = mongoose.model('users') //one argument means we are fetching
+
+// Define a function and pass it to serializeUser
+//The user arg is whatever user model we just returned from the DB
+//done is a callback
+passport.serializeUser((user, done) => {
+    done(null, user.id)  //user record ID
+})
+
+passport.deserializeUser((id, done) => {
+    // DB call creates a promise can use .then
+    User.findById(id)  //user record ID
+        //user model that was returned from the DB
+        .then(user => {
+            done(null, user)
+        })
+    console.log(`unid: ${id}`)
+})
 
 //BEGIN GOOGLE PASSPORT CODE
 passport.use(new GoogleStrategy({
@@ -17,21 +34,26 @@ passport.use(new GoogleStrategy({
     (accessToken, refreshToken, profile, done) => {
         console.log(profile.displayName)
         console.log(profile.id)
+        //Call to MongoDB, it is an async operation and creates a promise so we can chain on a .then to determine next steps when the call returns        
         User.findOne({ google_id: profile.id })
             .then((userExists) => {
                 if (userExists) {
                     console.log('User already in the DB.')
+                    //call done function to indicate the function is "done"
+                    //if all went well then pass null to indicate nothing went wrong and here is the user record we found, so all good
+                    done(null, userExists)
                 }
                 else {
-                    new User({ google_id: profile.id }).save()
+                    //any DB operation is async so want to call "done" when really done
+                    //again, all DB calls create a promise and use .then to do next action when call is complete
+                    new User({ google_id: profile.id }).save()  //This creates a new User instance and is save to the DB
+                        .then(user => done(null, user))             //This returns another instance of the same user, but we use this one because it is "fresher"
                 }
             })
 
     }
 )
 )
-
-
 //END GOOGLE PASSPORT CODE
 
 //BEGIN FACEBOOK PASSPORT CODE
@@ -40,28 +62,28 @@ passport.use(new FacebookStrategy({
     clientSecret: keys.facebookClientSecret,
     callbackURL: '/auth/facebook/callback'
 },
-
     (accessToken, refreshToken, profile, done) => {
         console.log(profile.displayName)
         console.log(profile.id)
+        //Call to MongoDB, it is an async operation and creates a promise so we can chain on a .then to determine next steps when the call returns
         User.findOne({ facebook_id: profile.id })
             .then((userExists) => {
                 if (userExists) {
                     console.log('User already in the DB.')
+                    //call done function to indicate the function is "done"
+                    //if all went well then pass null to indicate nothing went wrong and here is the user record we found, so all good
+                    done(null, userExists)
                 }
                 else {
-                    new User({ facebook_id: profile.id }).save()
+                    //any DB operation is async so want to call "done" when really done
+                    //again, all DB calls create a promise and use .then to do next action when call is complete
+                    new User({ facebook_id: profile.id }).save()  //This creates a new User instance and is save to the DB
+                        .then(user => done(null, user))             //This returns another instance of the same user, but we use this one because it is "fresher"
                 }
             })
     }
-
-    // function(accessToken, refreshToken, profile, cb) {
-    //   User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-    //     return cb(err, user);
-    //   });
-    // }
 ));
-
+//END FACEBOOK PASSPORT CODE
 
 //passport.use(new LinkedInStrategy())
 //passport.use(new GithubStrategy())
