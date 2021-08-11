@@ -49,8 +49,16 @@ module.exports = app => {
     //Local Routes
 
 
+    //Define route and pass the arrow function that will be executed when this route is requested
+    //Pass two args to arrow func req and res (incoming request and outgoing response)
+    app.get('/api/current_user', (req, res) => {
+        res.send(req.user)
 
+    })
 
-
+    app.get('/api/logout', (req, res) => {
+        req.logout()
+        res.send(req.user)
+    })
 
 };
