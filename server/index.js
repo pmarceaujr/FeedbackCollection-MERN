@@ -15,7 +15,6 @@ require('./services/passport')
 const app = express();
 
 
-
 //app.use wires up middleware, which is a small app used to modify incoming requests before they are sent off to route handlers
 //Therefore they are a great place to logic that is common to many route handlers
 //app.use triggers for every request call
