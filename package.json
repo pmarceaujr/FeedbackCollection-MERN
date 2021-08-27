@@ -9,6 +9,7 @@
   },
   "scripts": {
     "start": "node server/index.js",
+    "install": "cd server && npm i && cd client && npm i",
     "dev": "nodemon index.js"
   },
   "author": "",
