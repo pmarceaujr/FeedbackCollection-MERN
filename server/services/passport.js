@@ -1,9 +1,9 @@
 const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth20').Strategy
 const FacebookStrategy = require('passport-facebook').Strategy
-const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy
-const GithubStrategy = require('passport-github2').Strategy
-const LocalStrategy = require('passport-local').Strategy
+//const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy
+//const GithubStrategy = require('passport-github2').Strategy
+//const LocalStrategy = require('passport-local').Strategy
 const mongoose = require('mongoose')
 const keys = require('../config/keys')
 const User = mongoose.model('users') //one argument means we are fetching
