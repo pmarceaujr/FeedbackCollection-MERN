@@ -1,6 +1,6 @@
 const passport = require('passport')
 const GoogleStrategy = require('passport-google-oauth20').Strategy
-const FacebookStrategy = require('passport-facebook').Strategy
+//const FacebookStrategy = require('passport-facebook').Strategy
 //const LinkedInStrategy = require('passport-linkedin-oauth2').Strategy
 //const GithubStrategy = require('passport-github2').Strategy
 //const LocalStrategy = require('passport-local').Strategy
@@ -57,7 +57,7 @@ passport.use(new GoogleStrategy({
 //END GOOGLE PASSPORT CODE
 
 //BEGIN FACEBOOK PASSPORT CODE
-passport.use(new FacebookStrategy({
+/*passport.use(new FacebookStrategy({
     clientID: keys.facebookClientID,
     clientSecret: keys.facebookClientSecret,
     callbackURL: '/auth/facebook/callback'
@@ -83,6 +83,7 @@ passport.use(new FacebookStrategy({
             })
     }
 ));
+*/
 //END FACEBOOK PASSPORT CODE
 
 //passport.use(new LinkedInStrategy())
