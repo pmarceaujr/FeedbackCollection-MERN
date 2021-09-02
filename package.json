@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "node server/index.js",
-    "dev": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
+    "dev": "concurrently \"cd server && npm run start\" \"cd server/client && npm start\"",
     "install": "cd server && npm i && cd client && npm i",
     "devold": "nodemon index.js"
   },
